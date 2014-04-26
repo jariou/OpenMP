@@ -1,0 +1,13 @@
+# cscope stuffs
+cscope.files
+cscope.in.out
+cscope.po.out
+cscope.out
+
+# object files or kernel object files
+*.o
+*.ko
+
+# OS X stuff
+.DS_Store
+bin/
