@@ -36,8 +36,7 @@ double Integration_MP(int nSteps)
         int nThreads = omp_get_num_threads();
         int i;
         resultSet[threadIdx] = 0;
-        int shift = threadIdx * nSteps / nThreads;
-        for( i = shift; i < shift + nSteps/nThreads; i++){
+        for( i = threadIdx, resultSet[threadIdx] = 0 ; i < nSteps; i += nThreads ){
             x = (i + 0.5) * delta;
             resultSet[threadIdx] += 4.0 / (1 + x * x);
         }
