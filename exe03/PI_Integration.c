@@ -26,23 +26,21 @@ double Integration_MP(int nSteps)
     double delta = 1 / (double) nSteps;
     int j;
     //avoid conflicts
-    double resultSet[NUM_THREADS];
     omp_set_num_threads(NUM_THREADS);
 
 #pragma omp parallel
     {
-        double x;
+        double x, seg_result;
         int threadIdx = omp_get_thread_num();
         int nThreads = omp_get_num_threads();
         int i;
-        resultSet[threadIdx] = 0;
-        for( i = threadIdx, resultSet[threadIdx] = 0 ; i < nSteps; i += nThreads ){
+        for( i = threadIdx, seg_result = 0 ; i < nSteps; i += nThreads ){
             x = (i + 0.5) * delta;
-            resultSet[threadIdx] += 4.0 / (1 + x * x);
+            seg_result += 4.0 / (1 + x * x);
         }
+#pragma omp critical
+        result += seg_result;
     }
-    for(j = 0; j < NUM_THREADS; j++)
-        result += resultSet[j];
     
     printf("Integration_MP time:%f\n", omp_get_wtime() - start);
     return result * delta;
