@@ -7,6 +7,7 @@
 /*Integration serial version*/
 double Integration_gold(int nSteps)
 {
+    double start = omp_get_wtime();
     double result = 0, x = 0;
     int i;
     double delta = 1 / (double) nSteps;
@@ -14,42 +15,43 @@ double Integration_gold(int nSteps)
         x = (i + 0.5) * delta;
         result += 4.0 / (1 + x * x);
     }
-
+    printf("Integration_gold time:%f\n", omp_get_wtime() - start);
     return result * delta;
 }
 
 double Integration_MP(int nSteps)
 {
-    double result = 0, x = 0;
+    double start = omp_get_wtime();
+    double result = 0;
     double delta = 1 / (double) nSteps;
-    int i;
+    int j;
     //avoid conflicts
     double resultSet[NUM_THREADS];
     omp_set_num_threads(NUM_THREADS);
 
 #pragma omp parallel
     {
+        double x;
         int threadIdx = omp_get_thread_num();
         int nThreads = omp_get_num_threads();
-        printf("threadIdx (%d). nThreads(%d)\n", threadIdx, nThreads);
+        int i;
         resultSet[threadIdx] = 0;
         int shift = threadIdx * nSteps / nThreads;
         for( i = shift; i < shift + nSteps/nThreads; i++){
             x = (i + 0.5) * delta;
             resultSet[threadIdx] += 4.0 / (1 + x * x);
         }
-        printf("threadIdx (%d). resultSet(%f)\n", threadIdx, resultSet[threadIdx]* delta);
     }
-
-    for(i = 0; i < NUM_THREADS; i++)
-        result += resultSet[i];
+    for(j = 0; j < NUM_THREADS; j++)
+        result += resultSet[j];
     
+    printf("Integration_MP time:%f\n", omp_get_wtime() - start);
     return result * delta;
 }
 
 int main()
 {
-    int nSteps = 10000;
+    int nSteps = 10000000;
     printf("Gold result: %f\n", Integration_gold(nSteps));
     printf("OpenMP result: %f\n", Integration_MP(nSteps));
     return 0;
