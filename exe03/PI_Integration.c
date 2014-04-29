@@ -24,7 +24,6 @@ double Integration_MP(int nSteps)
     double start = omp_get_wtime();
     double result = 0;
     double delta = 1 / (double) nSteps;
-    int j;
     //avoid conflicts
     omp_set_num_threads(NUM_THREADS);
 

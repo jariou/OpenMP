@@ -27,7 +27,7 @@ set(CMAKE_C_FLAGS "-Wall  ${OpenMP_C_FLAGS}" )
 
 set(SOURCES_EXE01 ./exe01/hello.c)
 set(SOURCES_EXE02 ./exe02/PI_Integration.c)
-set(SOURCES_EXE03 ./exe02/PI_Integration.c)
+set(SOURCES_EXE03 ./exe03/PI_Integration.c)
 
 add_executable(hello ${SOURCES_EXE01})
 add_executable(PI_Integration ${SOURCES_EXE02})
