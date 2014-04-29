@@ -25,12 +25,14 @@ double Integration_MP(int nSteps)
     double result = 0;
     int i;
     double delta = 1 / (double) nSteps;
-    
-#pragma omp parallel for reduction (+:result)
-    for( i = 0; i < nSteps; i++){
-        double x;
-        x = (i + 0.5) * delta;
-        result += 4.0 / (1 + x * x);
+    #pragma omp parallel
+    { 
+            double x;
+        #pragma omp parallel for reduction (+:result)
+        for( i = 0; i < nSteps; i++){
+            x = (i + 0.5) * delta;
+            result += 4.0 / (1 + x * x);
+        }
     }
 
     printf("Integration_gold time:%f\n", omp_get_wtime() - start);
