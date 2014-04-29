@@ -8,6 +8,9 @@ cscope.out
 *.o
 *.ko
 
+#vim swap file
+*.swp
+
 # OS X stuff
 .DS_Store
 bin/
