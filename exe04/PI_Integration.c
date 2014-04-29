@@ -35,7 +35,7 @@ double Integration_MP(int nSteps)
         }
     }
 
-    printf("Integration_gold time:%f\n", omp_get_wtime() - start);
+    printf("Integration_MP time:%f\n", omp_get_wtime() - start);
     return result * delta;
 }
 
